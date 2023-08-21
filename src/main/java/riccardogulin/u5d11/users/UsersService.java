@@ -27,7 +27,8 @@ public class UsersService {
 		usersRepo.findByEmail(body.getEmail()).ifPresent(user -> {
 			throw new BadRequestException("L'email è già stata utilizzata");
 		});
-		User newUser = new User(body.getName(), body.getSurname(), body.getEmail(), body.getPassword());
+		User newUser = new User(body.getName(), body.getSurname(), body.getEmail(), body.getPassword(),
+				body.getCreditCard());
 		return usersRepo.save(newUser);
 	}
 

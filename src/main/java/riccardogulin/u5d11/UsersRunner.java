@@ -25,8 +25,9 @@ public class UsersRunner implements CommandLineRunner {
 			String surname = faker.name().lastName();
 			String email = faker.internet().emailAddress();
 			String password = "1234";
-			UserRequestPayload user = new UserRequestPayload(name, surname, email, password);
-			// usersServ.create(user);
+			String creditCard = faker.business().creditCardNumber();
+			UserRequestPayload user = new UserRequestPayload(name, surname, email, password, creditCard);
+			usersServ.create(user);
 		}
 
 	}

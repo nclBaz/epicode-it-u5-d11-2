@@ -8,7 +8,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -22,11 +25,14 @@ import lombok.NoArgsConstructor;
 @Table(name = "users")
 @Data
 @NoArgsConstructor
+@JsonIgnoreProperties({ "password", "accountNonExpired", "authorities", "credentialsNonExpired", "accountNonLocked" })
 public class User implements UserDetails {
 	@Id
 	@GeneratedValue
 	private UUID id;
 	private String name;
+
+	@Convert(converter = CreditCardConverter.class)
 	private String surname;
 	@Column(nullable = false, unique = true)
 	private String email;
@@ -34,12 +40,16 @@ public class User implements UserDetails {
 	@Enumerated(EnumType.STRING)
 	private Role role;
 
-	public User(String name, String surname, String email, String password) {
+	@Convert(converter = CreditCardConverter.class)
+	private String creditCard;
+
+	public User(String name, String surname, String email, String password, String creditCard) {
 		this.name = name;
 		this.surname = surname;
 		this.email = email;
 		this.password = password;
 		this.role = Role.USER;
+		this.creditCard = creditCard;
 	}
 
 	@Override
