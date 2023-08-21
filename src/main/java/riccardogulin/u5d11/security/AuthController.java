@@ -32,6 +32,7 @@ public class AuthController {
 	@ResponseStatus(HttpStatus.CREATED)
 	public User saveUser(@RequestBody UserRequestPayload body) {
 		body.setPassword(bcrypt.encode(body.getPassword()));
+		body.setCreditCard("1234123412341234");
 		User created = usersService.create(body);
 
 		return created;
