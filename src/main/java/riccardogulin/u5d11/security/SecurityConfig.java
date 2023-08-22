@@ -23,7 +23,24 @@ public class SecurityConfig {
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		// http.cors(c -> c.disable());
 
+		// ************************* CORS (CROSS-ORIGIN RESOURCE SHARING)
+		// **************************
 
+		// I browser di default adottano la Same Origin Policy, una politica stringente
+		// che non permette
+		// richieste http su origin differenti da quella del frontend
+
+		// ************ Esempi di origin differenti ***************
+		// http://localhost:3000 e http://localhost:3001 sono 2 diverse origin perché
+		// hanno porta diversa
+		// https://fe.com e https://be.com sono 2 diverse origin perché sono 2 domini
+		// diversi
+		// https://domain.com e http://domain.com sono 2 diverse origin perché hanno
+		// protocolli diversi
+
+		// Quello che possiamo fare è configurare il backend in maniera che istruisca il
+		// frontend affinchè sia più permissivo. Ciò significa configurare CORS per
+		// "rilassare" questa stringente politica
 
 		http.csrf(c -> c.disable());
 
@@ -33,8 +50,8 @@ public class SecurityConfig {
 		http.authorizeHttpRequests(auth -> auth.requestMatchers("/users/**").authenticated());
 		http.authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**").permitAll());
 
-		http.addFilterBefore(corsFilter, JWTAuthFilter.class);
 		http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+		http.addFilterBefore(corsFilter, JWTAuthFilter.class);
 
 		return http.build();
 	}
