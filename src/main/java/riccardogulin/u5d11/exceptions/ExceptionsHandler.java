@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -34,6 +35,12 @@ public class ExceptionsHandler {
 	@ResponseStatus(HttpStatus.UNAUTHORIZED)
 	public ErrorsPayload handleUnauthorized(UnauthorizedException e) {
 		return new ErrorsPayload(e.getMessage(), new Date(), 21323);
+	}
+
+	@ExceptionHandler(AccessDeniedException.class)
+	@ResponseStatus(HttpStatus.FORBIDDEN)
+	public ErrorsPayload handleForbidden(AccessDeniedException e) {
+		return new ErrorsPayload("Non hai accesso a questo endpoint", new Date(), 21323);
 	}
 
 	@ExceptionHandler(NotFoundException.class)
